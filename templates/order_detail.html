@@ -1,0 +1,95 @@
+{% extends "base.html" %}
+{% block title %}Заказ #{{ order.id }} · DixonWR CRM{% endblock %}
+{% block content %}
+<div class="page-heading">
+  <div>
+    <p class="eyebrow">КАРТОЧКА ЗАКАЗА #{{ order.id }}</p>
+    <h1>Заказ #{{ order.id }}</h1>
+    <p class="muted">Клиент: <strong>{{ order.full_name }}</strong></p>
+  </div>
+  <div style="display: flex; gap: 8px;">
+    <button class="button button-danger" onclick="deleteOrder({{ order.id }})">Удалить заказ</button>
+    <a class="button button-secondary" href="/orders">К списку заказов</a>
+  </div>
+</div>
+
+<div style="display: grid; grid-template-columns: 2fr 1fr; gap: 20px;">
+  <!-- Левая колонка: товары -->
+  <section class="panel">
+    <h2>Состав заказа</h2>
+    <div class="table-wrap" style="margin-top: 14px;">
+      <table>
+        <thead>
+          <tr>
+            <th>Товар</th>
+            <th>Категория</th>
+            <th>Размер</th>
+            <th>Кол-во</th>
+            <th>Цена</th>
+            <th>Сумма</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for item in items %}
+          <tr>
+            <td class="primary-cell">{{ item.product_name }}</td>
+            <td><span class="badge">{{ item.category }}</span></td>
+            <td><strong>{{ item.size_selected or '—' }}</strong></td>
+            <td>{{ item.quantity }} шт.</td>
+            <td>{{ item.price_at_order }} BYN</td>
+            <td><strong>{{ item.price_at_order * item.quantity }} BYN</strong></td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+    
+    <div style="text-align: right; margin-top: 18px; font-size: 20px; font-weight: 850;">
+      Итого к оплате: <span style="color: var(--primary);">{{ order.total_price }} BYN</span>
+    </div>
+  </section>
+
+  <!-- Правая колонка: информация и статус -->
+  <section class="panel">
+    <h2>Информация и статус</h2>
+    
+    <div style="margin: 16px 0;">
+      <label for="changeStatusSelect">Статус заказа</label>
+      <select id="changeStatusSelect" onchange="updateOrderStatus({{ order.id }}, this.value)" style="font-weight: 700;">
+        <option value="NEW" {% if order.status == 'NEW' %}selected{% endif %}>🟢 Новый</option>
+        <option value="IN_PROGRESS" {% if order.status == 'IN_PROGRESS' %}selected{% endif %}>🟠 В работе / Сборка</option>
+        <option value="SHIPPED" {% if order.status == 'SHIPPED' %}selected{% endif %}>🔵 Отправлен</option>
+        <option value="DELIVERED" {% if order.status == 'DELIVERED' %}selected{% endif %}>✅ Доставлен</option>
+        <option value="CANCELLED" {% if order.status == 'CANCELLED' %}selected{% endif %}>🔴 Отменён</option>
+      </select>
+    </div>
+
+    <div class="detail-item">
+      <span>Клиент</span>
+      <strong><a href="/customers/{{ order.customer_id }}" style="color: var(--primary);">{{ order.full_name }}</a></strong>
+    </div>
+
+    <div class="detail-item">
+      <span>Контакты</span>
+      <strong>{{ order.phone or '—' }} {% if order.instagram_username %}(@{{ order.instagram_username }}){% endif %}</strong>
+    </div>
+
+    <div class="detail-item">
+      <span>Город доставки</span>
+      <strong>{{ order.delivery_city or 'Минск' }}</strong>
+    </div>
+
+    {% if order.comment %}
+    <div class="detail-item">
+      <span>Примечание</span>
+      <strong>{{ order.comment }}</strong>
+    </div>
+    {% endif %}
+
+    <div class="detail-item">
+      <span>Дата создания</span>
+      <strong data-date="{{ order.created_at }}">{{ order.created_at }}</strong>
+    </div>
+  </section>
+</div>
+{% endblock %}

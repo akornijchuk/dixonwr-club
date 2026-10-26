@@ -1,0 +1,311 @@
+[
+  {
+    "name": "КОСТЮМ BASE BLACK",
+    "category": "КОСТЮМЫ",
+    "price_byn": 410,
+    "sizes": [
+      "S (Зип кроп-топ)",
+      "S (Зип классика)",
+      "M",
+      "L",
+      "XL"
+    ],
+    "in_stock": true
+  },
+  {
+    "name": "КОСТЮМ BASE MELANGE",
+    "category": "КОСТЮМЫ",
+    "price_byn": 410,
+    "sizes": [
+      "S (Зип кроп-топ)",
+      "S (Зип классика)",
+      "M",
+      "L",
+      "XL"
+    ],
+    "in_stock": true
+  },
+  {
+    "name": "КОСТЮМ BASE FIRE RED",
+    "category": "КОСТЮМЫ",
+    "price_byn": 410,
+    "sizes": [
+      "S (Зип кроп-топ)",
+      "S (Зип классика)",
+      "M",
+      "L",
+      "XL"
+    ],
+    "in_stock": true
+  },
+  {
+    "name": "СВИТШОТ \"FREEDOM\" КРАСНЫЙ",
+    "category": "СВИТШОТЫ",
+    "price_byn": 290,
+    "sizes": [
+      "one size"
+    ],
+    "in_stock": true
+  },
+  {
+    "name": "ЗИП КРОП-ТОП BLACK",
+    "category": "ZIP-ХУДИ/ХУДИ",
+    "price_byn": 270,
+    "sizes": [
+      "S",
+      "M"
+    ],
+    "in_stock": true
+  },
+  {
+    "name": "ШТАНЫ BASE BLACK",
+    "category": "ШТАНЫ",
+    "price_byn": 170,
+    "sizes": [
+      "S",
+      "M",
+      "L",
+      "XL"
+    ],
+    "in_stock": true
+  },
+  {
+    "name": "ЗИП BASE MELANGE",
+    "category": "ZIP-ХУДИ/ХУДИ",
+    "price_byn": 280,
+    "sizes": [
+      "S",
+      "M",
+      "L",
+      "XL"
+    ],
+    "in_stock": true
+  },
+  {
+    "name": "ШТАНЫ BASE MELANGE",
+    "category": "ШТАНЫ",
+    "price_byn": 170,
+    "sizes": [
+      "S",
+      "M",
+      "L",
+      "XL"
+    ],
+    "in_stock": true
+  },
+  {
+    "name": "ЗИП BASE FIRE RED",
+    "category": "ZIP-ХУДИ/ХУДИ",
+    "price_byn": 280,
+    "sizes": [
+      "S (Зип кроп-топ)",
+      "S (Зип классика)",
+      "M",
+      "L",
+      "XL"
+    ],
+    "in_stock": true
+  },
+  {
+    "name": "ШТАНЫ BASE FIRE RED",
+    "category": "ШТАНЫ",
+    "price_byn": 170,
+    "sizes": [
+      "S (Зип кроп-топ)",
+      "S (Зип классика)",
+      "M",
+      "L",
+      "XL"
+    ],
+    "in_stock": true
+  },
+  {
+    "name": "ФУТБОЛКА \"FREEDOM\" МЕЛАНЖ",
+    "category": "ФУТБОЛКИ",
+    "price_byn": 140,
+    "sizes": [
+      "S",
+      "M",
+      "L",
+      "XL",
+      "XXL"
+    ],
+    "in_stock": true
+  },
+  {
+    "name": "ФУТБОЛКА \"FREEDOM\" БЕЛАЯ",
+    "category": "ФУТБОЛКИ",
+    "price_byn": 140,
+    "sizes": [
+      "S",
+      "M",
+      "L",
+      "XL"
+    ],
+    "in_stock": false
+  },
+  {
+    "name": "ШОРТЫ \"MELANGE\"",
+    "category": "ШТАНЫ",
+    "price_byn": 120,
+    "sizes": [
+      "S",
+      "M",
+      "L",
+      "XL"
+    ],
+    "in_stock": false
+  },
+  {
+    "name": "ФУТБОЛКА \"BASE\" ЧЕРНАЯ",
+    "category": "ФУТБОЛКИ",
+    "price_byn": 130,
+    "sizes": [
+      "S",
+      "M",
+      "L",
+      "XL",
+      "XXL"
+    ],
+    "in_stock": true
+  },
+  {
+    "name": "ФУТБОЛКА \"BASE\" МЕЛАНЖ",
+    "category": "ФУТБОЛКИ",
+    "price_byn": 130,
+    "sizes": [
+      "S",
+      "M",
+      "L",
+      "XL",
+      "XXL"
+    ],
+    "in_stock": true
+  },
+  {
+    "name": "ФУТБОЛКА \"BASE\" БЕЛАЯ",
+    "category": "ФУТБОЛКИ",
+    "price_byn": 130,
+    "sizes": [
+      "S",
+      "M",
+      "L",
+      "XL",
+      "XXL"
+    ],
+    "in_stock": true
+  },
+  {
+    "name": "ЧЕРНЫЙ КОСТЮМ ИЗ ЛЬНА",
+    "category": "ЛЁН",
+    "price_byn": 390,
+    "sizes": [
+      "S",
+      "M",
+      "L",
+      "XL"
+    ],
+    "in_stock": true
+  },
+  {
+    "name": "НЕБЕСНЫЙ КОСТЮМ ИЗ ЛЬНА",
+    "category": "ЛЁН",
+    "price_byn": 390,
+    "sizes": [
+      "S",
+      "M",
+      "L",
+      "XL"
+    ],
+    "in_stock": true
+  },
+  {
+    "name": "БОМБЕР НА ФЛИСЕ",
+    "category": "КУРТКИ",
+    "price_byn": 250,
+    "sizes": [
+      "one size"
+    ],
+    "in_stock": true
+  },
+  {
+    "name": "БЕЗРУКАВКА ЧЕРНАЯ",
+    "category": "ФУТБОЛКИ",
+    "price_byn": 110,
+    "sizes": [
+      "one size"
+    ],
+    "in_stock": true
+  },
+  {
+    "name": "БЕЗРУКАВКА БЕЛАЯ",
+    "category": "ФУТБОЛКИ",
+    "price_byn": 110,
+    "sizes": [
+      "one size"
+    ],
+    "in_stock": true
+  },
+  {
+    "name": "ЗИП КРОП-ТОП FIRE RED",
+    "category": "ZIP-ХУДИ/ХУДИ",
+    "price_byn": 270,
+    "sizes": [
+      "S",
+      "M"
+    ],
+    "in_stock": false
+  },
+  {
+    "name": "РУБАШКА SUPREME",
+    "category": "РУБАШКИ",
+    "price_byn": 200,
+    "sizes": [
+      "S",
+      "M",
+      "L"
+    ],
+    "in_stock": false
+  },
+  {
+    "name": "БЕГОВОЙ КОСТЮМ “MOVEMENT”",
+    "category": "КОСТЮМЫ",
+    "price_byn": 350,
+    "sizes": [
+      "S",
+      "M",
+      "L",
+      "XL"
+    ],
+    "in_stock": false
+  },
+  {
+    "name": "СВИТШОТ \"FREEDOM\" БЕЛЫЙ",
+    "category": "СВИТШОТЫ",
+    "price_byn": 290,
+    "sizes": [
+      "One size"
+    ],
+    "in_stock": false
+  },
+  {
+    "name": "СВИТШОТ \"FREEDOM\" МЕЛАНЖ",
+    "category": "СВИТШОТЫ",
+    "price_byn": 290,
+    "sizes": [
+      "One size"
+    ],
+    "in_stock": false
+  },
+  {
+    "name": "КОСТЮМ \"VELVET\" ОЛИВА",
+    "category": "КОСТЮМЫ",
+    "price_byn": 390,
+    "sizes": [
+      "Женский",
+      "Мужской",
+      "Мужской +"
+    ],
+    "in_stock": false
+  }
+]

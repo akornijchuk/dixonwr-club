@@ -1,0 +1,55 @@
+{% extends "base.html" %}
+{% block title %}Каталог товаров · DixonWR CRM{% endblock %}
+{% block content %}
+<div class="page-heading">
+  <div>
+    <p class="eyebrow">АССОРТИМЕНТ</p>
+    <h1>Каталог товаров DixonWR</h1>
+    <p class="muted">Управление позициями, ценами и доступными размерами.</p>
+  </div>
+  <a class="button button-accent" href="/products/new">＋ Добавить товар</a>
+</div>
+
+<section class="panel">
+  <div class="panel-heading">
+    <div>
+      <h2>Товары бренда</h2>
+      <p class="muted" id="productsCountLabel">Загрузка каталога…</p>
+    </div>
+    <div style="display: flex; gap: 10px;">
+      <input id="productSearchInput" placeholder="Поиск по названию..." style="width: 220px; font-size: 13px; padding: 6px 12px;" onkeyup="filterProducts()">
+      <select id="productCategoryFilter" onchange="filterProducts()" style="font-size: 13px; padding: 6px 12px; width: auto;">
+        <option value="">Все категории</option>
+        <option value="КОСТЮМЫ">Костюмы</option>
+        <option value="ZIP-ХУДИ/ХУДИ">Zip-худи / Худи</option>
+        <option value="ШТАНЫ">Штаны</option>
+        <option value="ФУТБОЛКИ">Футболки</option>
+        <option value="СВИТШОТЫ">Свитшоты</option>
+        <option value="ЛЁН">Лён</option>
+        <option value="КУРТКИ">Куртки</option>
+      </select>
+    </div>
+  </div>
+
+  <div id="productsMessage" class="message" aria-live="polite"></div>
+
+  <div class="table-wrap">
+    <table>
+      <thead>
+        <tr>
+          <th>ID</th>
+          <th>Наименование</th>
+          <th>Категория</th>
+          <th>Цена (BYN)</th>
+          <th>Размеры</th>
+          <th>Наличие</th>
+          <th style="text-align: right;">Действие</th>
+        </tr>
+      </thead>
+      <tbody id="productsTableBody">
+        <!-- Заполняется JS -->
+      </tbody>
+    </table>
+  </div>
+</section>
+{% endblock %}

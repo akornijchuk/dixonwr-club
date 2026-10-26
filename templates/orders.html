@@ -1,0 +1,52 @@
+{% extends "base.html" %}
+{% block title %}Заказы · DixonWR CRM{% endblock %}
+{% block content %}
+<div class="page-heading">
+  <div>
+    <p class="eyebrow">ОПЕРАЦИИ</p>
+    <h1>Заказы клиентов</h1>
+    <p class="muted">Управление заказами, товарами и статусами доставки DixonWR.</p>
+  </div>
+  <a class="button" href="/orders/new">＋ Оформить новый заказ</a>
+</div>
+
+<section class="panel">
+  <div class="panel-heading">
+    <div>
+      <h2>Все заказы</h2>
+      <p class="muted">История и текущие активные заказы.</p>
+    </div>
+    <div style="display: flex; gap: 10px;">
+      <select id="orderStatusFilter" style="font-size: 13px; padding: 6px 12px; width: auto;">
+        <option value="">Все статусы</option>
+        <option value="NEW">Новые</option>
+        <option value="IN_PROGRESS">В работе / Сборка</option>
+        <option value="SHIPPED">Отправлен</option>
+        <option value="DELIVERED">Доставлен</option>
+        <option value="CANCELLED">Отменён</option>
+      </select>
+    </div>
+  </div>
+
+  <div id="ordersMessage" class="message" aria-live="polite"></div>
+
+  <div class="table-wrap">
+    <table>
+      <thead>
+        <tr>
+          <th>№ Заказа</th>
+          <th>Клиент</th>
+          <th>Город</th>
+          <th>Сумма (BYN)</th>
+          <th>Статус</th>
+          <th>Дата создания</th>
+          <th style="text-align: right;">Действие</th>
+        </tr>
+      </thead>
+      <tbody id="ordersTableBody">
+        <!-- Loaded dynamically via JS -->
+      </tbody>
+    </table>
+  </div>
+</section>
+{% endblock %}

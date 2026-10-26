@@ -1,0 +1,82 @@
+{% extends "base.html" %}
+{% block title %}Новый заказ · DixonWR CRM{% endblock %}
+{% block content %}
+<div class="page-heading">
+  <div>
+    <p class="eyebrow">ОФОРМЛЕНИЕ ЗАКАЗА</p>
+    <h1>Новый заказ</h1>
+    <p class="muted">Выберите клиента и добавьте позиции из каталога бренда DixonWR.</p>
+  </div>
+  <a class="button button-secondary" href="/orders">← Отмена</a>
+</div>
+
+<section class="panel" style="max-width: 900px;">
+  <form id="orderForm">
+    <!-- Шаг 1: Выбор клиента -->
+    <div style="margin-bottom: 24px; padding-bottom: 20px; border-bottom: 1px solid var(--border-color);">
+      <h3 style="margin: 0 0 12px; font-size: 16px;">1. Клиент</h3>
+      
+      {% if initial_customer %}
+      <input type="hidden" id="selectedCustomerId" value="{{ initial_customer.id }}">
+      <div class="badge badge-phone" style="font-size: 14px; padding: 10px 14px; border-radius: 8px;">
+        👤 <strong>{{ initial_customer.full_name }}</strong> ({{ initial_customer.phone or 'без телефона' }} | {{ '@' + initial_customer.instagram_username if initial_customer.instagram_username else 'без IG' }})
+      </div>
+      {% else %}
+      <input type="hidden" id="selectedCustomerId" value="">
+      <div style="display: flex; gap: 10px; margin-bottom: 8px;">
+        <input id="customerSearchInput" placeholder="Введите имя, телефон или Instagram клиента..." autocomplete="off" onkeydown="if(event.key==='Enter'){ searchCustomersForOrder(event); }">
+        <button class="button button-secondary" type="button" onclick="searchCustomersForOrder(event)">Найти</button>
+      </div>
+      <div id="customerSearchResults" class="search-results"></div>
+      <div id="selectedCustomerBadge" style="margin-top: 10px;"></div>
+      {% endif %}
+    </div>
+
+    <!-- Шаг 2: Выбор товаров из каталога -->
+    <div style="margin-bottom: 24px; padding-bottom: 20px; border-bottom: 1px solid var(--border-color);">
+      <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px;">
+        <h3 style="margin: 0; font-size: 16px;">2. Товары в заказе</h3>
+        <button class="button button-secondary" type="button" onclick="addOrderItemRow()" style="font-size: 12.5px; padding: 6px 12px;">＋ Добавить позицию</button>
+      </div>
+
+      <div id="orderItemsContainer" style="display: grid; gap: 12px;">
+        <!-- Rows added via JS -->
+      </div>
+
+      <div style="margin-top: 16px; text-align: right; font-size: 18px; font-weight: 800;">
+        Итоговая сумма: <span id="orderTotalSum" style="color: var(--primary);">0</span> BYN
+      </div>
+    </div>
+
+    <!-- Шаг 3: Детали и состав -->
+    <div style="margin-bottom: 24px;">
+      <h3 style="margin: 0 0 12px; font-size: 16px;">3. Детали и комментарий</h3>
+      
+      <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 14px;">
+        <div>
+          <label for="deliveryCity">Город доставки</label>
+          <input id="deliveryCity" value="Минск">
+        </div>
+        <div>
+          <label for="orderStatus">Начальный статус</label>
+          <select id="orderStatus">
+            <option value="NEW">Новый</option>
+            <option value="IN_PROGRESS">В работе / Сборка</option>
+            <option value="DELIVERED">Доставлен и оплачен</option>
+          </select>
+        </div>
+      </div>
+
+      <label for="orderComment">Комментарий или примечание к заказу</label>
+      <input id="orderComment" placeholder="например, выездная примерка или особый размер">
+    </div>
+
+    <div id="orderFormMessage" class="message" aria-live="polite"></div>
+
+    <div style="display: flex; gap: 12px; margin-top: 20px;">
+      <button class="button button-accent" type="submit" id="saveOrderButton">Создать заказ</button>
+      <a class="button button-secondary" href="/orders">Отмена</a>
+    </div>
+  </form>
+</section>
+{% endblock %}

@@ -1,0 +1,72 @@
+{% extends "base.html" %}
+{% block title %}{% if product %}Редактировать товар{% else %}Новый товар{% endif %} · DixonWR CRM{% endblock %}
+{% block content %}
+<div class="page-heading">
+  <div>
+    <p class="eyebrow">КАТАЛОГ</p>
+    <h1>{% if product %}Редактировать товар{% else %}Добавить товар{% endif %}</h1>
+    <p class="muted">Заполните параметры изделия DixonWR и укажите складские остатки по размерам.</p>
+  </div>
+  <a class="button button-secondary" href="/products">← Назад</a>
+</div>
+
+<section class="panel" style="max-width: 800px;">
+  <form id="productForm" data-mode="{% if product %}edit{% else %}create{% endif %}" {% if product %}data-product-id="{{ product.id }}"{% endif %}>
+    <!-- Название товара -->
+    <div style="margin-bottom: 18px;">
+      <label for="prodName">Название товара <span style="color:var(--primary);">*</span></label>
+      <input id="prodName" required placeholder="например, ЗИП BASE FIRE RED" value="{{ product.name if product else '' }}">
+    </div>
+
+    <!-- Категория и Цена -->
+    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 22px;">
+      <div>
+        <label for="prodCategory">Категория</label>
+        <select id="prodCategory">
+          <option value="КОСТЮМЫ" {% if product and product.category == 'КОСТЮМЫ' %}selected{% endif %}>КОСТЮМЫ</option>
+          <option value="ZIP-ХУДИ/ХУДИ" {% if product and product.category == 'ZIP-ХУДИ/ХУДИ' %}selected{% endif %}>ZIP-ХУДИ/ХУДИ</option>
+          <option value="ШТАНЫ" {% if product and product.category == 'ШТАНЫ' %}selected{% endif %}>ШТАНЫ</option>
+          <option value="ФУТБОЛКИ" {% if product and product.category == 'ФУТБОЛКИ' %}selected{% endif %}>ФУТБОЛКИ</option>
+          <option value="СВИТШОТЫ" {% if product and product.category == 'СВИТШОТЫ' %}selected{% endif %}>СВИТШОТЫ</option>
+          <option value="ЛЁН" {% if product and product.category == 'ЛЁН' %}selected{% endif %}>ЛЁН</option>
+          <option value="КУРТКИ" {% if product and product.category == 'КУРТКИ' %}selected{% endif %}>КУРТКИ</option>
+          <option value="АКСЕССУАРЫ" {% if product and product.category == 'АКСЕССУАРЫ' %}selected{% endif %}>АКСЕССУАРЫ</option>
+        </select>
+      </div>
+
+      <div>
+        <label for="prodPrice">Цена (BYN) <span style="color:var(--primary);">*</span></label>
+        <input id="prodPrice" type="number" step="0.01" required placeholder="280" value="{{ product.price_byn if product else '' }}">
+      </div>
+    </div>
+
+    <!-- Размеры и Остатки на складе (Сетка по каждому размеру) -->
+    <div style="margin-bottom: 24px; padding: 18px; background: #f9fafb; border: 1px solid var(--border-color); border-radius: var(--radius-md);">
+      <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 14px;">
+        <div>
+          <label style="margin: 0; font-size: 14px; font-weight: 700;">Размеры и остатки на складе (шт.)</label>
+          <p class="muted" style="font-size: 12px; margin-top: 2px;">Укажите точный остаток для каждого размера изделия.</p>
+        </div>
+        <button type="button" class="button button-secondary" onclick="addSizeStockRow()" style="font-size: 12px; padding: 5px 12px;">＋ Добавить размер</button>
+      </div>
+
+      <div id="sizesStockListContainer" style="display: grid; gap: 10px;">
+        <!-- Динамические строки размера и количества генерируются JS -->
+      </div>
+      
+      <!-- Скрытое поле для передачи исходных размеров из БД -->
+      <input type="hidden" id="rawProductSizes" value="{{ product.sizes if product else '' }}">
+    </div>
+
+    <div id="productFormMessage" class="message" aria-live="polite"></div>
+
+    <div style="display: flex; gap: 12px; margin-top: 24px;">
+      <button class="button button-accent" type="submit" id="saveProductButton">{% if product %}Сохранить изменения{% else %}Добавить в каталог{% endif %}</button>
+      {% if product %}
+      <button class="button button-danger" type="button" onclick="deleteProduct('{{ product.id }}')">Удалить товар</button>
+      {% endif %}
+      <a class="button button-secondary" href="/products">Отмена</a>
+    </div>
+  </form>
+</section>
+{% endblock %}

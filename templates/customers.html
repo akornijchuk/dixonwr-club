@@ -1,0 +1,16 @@
+{% extends "base.html" %}
+{% block title %}Клиенты · DixonWR{% endblock %}
+{% block content %}
+<div class="page-heading"><div><p class="eyebrow">БАЗА КЛИЕНТОВ</p><h1>Клиенты</h1><p class="muted">Поиск, просмотр и управление клиентскими карточками.</p></div><a class="button" href="/customers/new">＋ Добавить клиента</a></div>
+<section class="panel">
+  <h2>Поиск клиента</h2><p class="muted">По имени, телефону или Instagram username.</p>
+  <form id="searchForm" class="search-row"><input id="search" name="q" placeholder="Например, +375… или @username" autocomplete="off"><button class="button" type="submit">Найти</button></form>
+  <div id="searchMessage" class="message" aria-live="polite"></div><div id="searchResults" class="search-results"></div>
+</section>
+<section class="panel">
+  <div class="panel-heading"><div><h2>Все клиенты</h2><p class="muted">Список загружается по 50 записей.</p></div><div class="sort-control"><label for="customersSort">Сортировка</label><select id="customersSort"><option value="name:asc">Имя (А–Я)</option><option value="name:desc">Имя (Я–А)</option><option value="id:desc">Сначала новые ID</option><option value="id:asc">Сначала старые ID</option><option value="updated_at:desc">Последнее изменение</option></select></div></div>
+  <div id="allCustomersMessage" class="message" aria-live="polite"></div><p id="customersCount" class="muted count-label"></p>
+  <div class="table-wrap"><table id="customersTable"><thead><tr><th>ID</th><th>Имя</th><th>Телефон</th><th>Instagram</th><th>Изменён</th><th></th></tr></thead><tbody id="customersTableBody"></tbody></table></div>
+  <div id="customersPagination" class="pagination"></div>
+</section>
+{% endblock %}

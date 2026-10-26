@@ -1,0 +1,16 @@
+{% extends "base.html" %}
+{% if mode == 'edit' %}{% set page_title = 'Редактировать клиента' %}{% else %}{% set page_title = 'Добавить клиента' %}{% endif %}
+{% block title %}{{ page_title }} · DixonWR{% endblock %}
+{% block content %}
+<div class="page-heading"><div><p class="eyebrow">КЛИЕНТЫ</p><h1>{{ page_title }}</h1><p class="muted">Имя и хотя бы один способ идентификации обязательны.</p></div><a class="button button-secondary" href="{% if customer %}/customers/{{ customer.id }}{% else %}/customers{% endif %}">← Назад</a></div>
+<section class="panel form-panel">
+  <form id="customerForm" data-mode="{{ mode }}" {% if customer %}data-customer-id="{{ customer.id }}"{% endif %}>
+    <label for="fullName">Имя клиента <span class="required">*</span></label><input id="fullName" name="full_name" required maxlength="200" placeholder="Имя или имя и фамилия" value="{{ customer.full_name if customer else '' }}">
+    <label for="phone">Телефон</label><input id="phone" name="phone" type="tel" placeholder="+375…" value="{{ customer.phone if customer else '' }}">
+    <label for="instagram">Instagram username</label><input id="instagram" name="instagram_username" placeholder="@username" value="{{ customer.instagram_username if customer else '' }}">
+    <p class="form-hint">Укажи телефон, Instagram или оба значения. Телефон и Instagram должны быть уникальными для каждого клиента.</p>
+    <div class="form-actions"><button class="button" id="saveCustomerButton" type="submit">{% if customer %}Сохранить изменения{% else %}Создать карточку{% endif %}</button><a class="button button-secondary" href="{% if customer %}/customers/{{ customer.id }}{% else %}/customers{% endif %}">Отмена</a></div>
+    <div id="formMessage" class="message" aria-live="polite"></div>
+  </form>
+</section>
+{% endblock %}
