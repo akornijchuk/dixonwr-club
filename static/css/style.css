@@ -157,6 +157,37 @@ a {
   color: var(--text-muted);
 }
 
+
+.topbar-actions {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.topbar-actions form {
+  margin: 0;
+}
+
+
+.logout-button {
+  padding: 6px 12px;
+  border: 1px solid #ed1028;
+  border-radius: 6px;
+  background: transparent;
+  color: #ed1028;
+  font-family: inherit;
+  font-size: 12px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background-color 0.2s ease, color 0.2s ease;
+}
+
+.logout-button:hover {
+  background-color: #ed1028;
+  color: #ffffff;
+}
+
+
 .mobile-nav-toggle {
   display: none;
   background: transparent;

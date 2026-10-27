@@ -8,7 +8,7 @@ from starlette.middleware.base import BaseHTTPMiddleware
 from contextlib import asynccontextmanager
 from pathlib import Path
 
-from fastapi import FastAPI, HTTPException, Request
+from fastapi import Depends, FastAPI, HTTPException, Request
 from fastapi.responses import HTMLResponse, Response, RedirectResponse
 from fastapi.staticfiles import StaticFiles
 from fastapi.templating import Jinja2Templates
@@ -263,6 +263,18 @@ async def logout(request: Request):
     request.session.clear()
     return RedirectResponse("/login", status_code=303)
 
+@app.get("/api/users")
+def list_users(_: bool = Depends(require_owner)):
+    with get_connection() as connection:
+        rows = connection.execute(
+            """
+            SELECT id, username, role, is_active, created_at
+            FROM users
+            ORDER BY id
+            """
+        ).fetchall()
+
+    return [dict(row) for row in rows]
 
 class CustomerCreate(BaseModel):
     full_name: str = Field(min_length=1, max_length=200)
@@ -283,6 +295,51 @@ class OrderCreate(BaseModel):
     status: str = "NEW"
     items: list[OrderItemCreate] = Field(min_items=1)
 
+class UserCreate(BaseModel):
+    username: str = Field(min_length=3, max_length=50)
+    password: str = Field(min_length=12, max_length=128)
+
+@app.post("/api/users")
+def create_manager(
+    user_data: UserCreate,
+    _: bool = Depends(require_owner),
+):
+    username = user_data.username.strip()
+
+    if len(username) < 3:
+        raise HTTPException(
+            status_code=400,
+            detail="Имя пользователя должно содержать минимум 3 символа.",
+        )
+
+    with get_connection() as connection:
+        existing_user = connection.execute(
+            "SELECT id FROM users WHERE username = ? COLLATE NOCASE",
+            (username,),
+        ).fetchone()
+
+        if existing_user:
+            raise HTTPException(
+                status_code=409,
+                detail="Пользователь с таким именем уже существует.",
+            )
+
+        cursor = connection.execute(
+            """
+            INSERT INTO users (username, password_hash, role)
+            VALUES (?, ?, 'manager')
+            """,
+            (username, password_hash.hash(user_data.password)),
+        )
+
+        user_id = cursor.lastrowid
+
+    return {
+        "id": user_id,
+        "username": username,
+        "role": "manager",
+        "is_active": 1,
+    }
 
 def customer_to_dict(customer):
     return {
