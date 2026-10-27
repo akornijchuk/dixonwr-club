@@ -1,0 +1,51 @@
+
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Вход — DixonWR CRM</title>
+  <link rel="stylesheet" href="/static/css/style.css?v=login1">
+</head>
+<body class="login-page">
+  <main class="login-card">
+    <a class="login-brand" href="/login">
+      DIXONWR <span>CRM</span>
+    </a>
+    <p class="login-description">
+      Войди в систему, чтобы продолжить работу
+    </p>
+
+    <form method="post" action="/login" class="login-form">
+      <label for="username">Имя пользователя</label>
+      <input
+        id="username"
+        name="username"
+        type="text"
+        autocomplete="username"
+        required
+        autofocus
+      >
+
+      <label for="password">Пароль</label>
+      <input
+        id="password"
+        name="password"
+        type="password"
+        autocomplete="current-password"
+        required
+      >
+
+      {% if error %}
+        <p class="login-error">{{ error }}</p>
+      {% endif %}
+
+      <button type="submit" class="button login-button">
+        Войти
+      </button>
+    </form>
+
+    <p class="login-footer">GOOD PEOPLE WEAR DIXONWR</p>
+  </main>
+</body>
+</html>

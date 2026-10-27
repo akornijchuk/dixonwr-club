@@ -1,14 +1,22 @@
 import re
 import json
 import sqlite3
+import os
+from starlette.middleware.sessions import SessionMiddleware
+from starlette.responses import JSONResponse
+from starlette.middleware.base import BaseHTTPMiddleware
 from contextlib import asynccontextmanager
 from pathlib import Path
 
 from fastapi import FastAPI, HTTPException, Request
-from fastapi.responses import HTMLResponse, Response
+from fastapi.responses import HTMLResponse, Response, RedirectResponse
 from fastapi.staticfiles import StaticFiles
 from fastapi.templating import Jinja2Templates
 from pydantic import BaseModel, Field
+from pwdlib import PasswordHash
+
+password_hash = PasswordHash.recommended()
+
 
 BASE_DIR = Path(__file__).resolve().parent
 DATA_DIR = Path("/app/data") if Path("/app/data").exists() else BASE_DIR / "data"
@@ -109,6 +117,18 @@ def init_db():
                     FOREIGN KEY (product_id) REFERENCES products(id)
                 )
             """)
+            
+            # Users table
+            connection.execute("""
+                CREATE TABLE IF NOT EXISTS users (
+                    id INTEGER PRIMARY KEY AUTOINCREMENT,
+                    username TEXT NOT NULL UNIQUE COLLATE NOCASE,
+                    password_hash TEXT NOT NULL,
+                    role TEXT NOT NULL CHECK (role IN ('owner', 'manager')),
+                    is_active INTEGER NOT NULL DEFAULT 1,
+                    created_at TEXT NOT NULL DEFAULT CURRENT_TIMESTAMP
+                )
+            """)
 
             # Seed products if empty
             count = connection.execute("SELECT COUNT(*) FROM products").fetchone()[0]
@@ -151,8 +171,90 @@ async def lifespan(app: FastAPI):
 
 
 app = FastAPI(title="DixonWR CRM", lifespan=lifespan)
+
 app.mount("/static", StaticFiles(directory=BASE_DIR / "static"), name="static")
 templates = Jinja2Templates(directory=BASE_DIR / "templates")
+
+class LoginMiddleware(BaseHTTPMiddleware):
+    async def dispatch(self, request: Request, call_next):
+        path = request.url.path
+
+        if (
+            path == "/login"
+            or path.startswith("/static/")
+            or path == "/favicon.ico"
+        ):
+            return await call_next(request)
+
+        if not request.session.get("user_id"):
+            if path.startswith("/api/"):
+                return JSONResponse(
+                    status_code=401,
+                    content={"detail": "Authentication required"},
+                )
+
+            return RedirectResponse("/login", status_code=303)
+
+        return await call_next(request)
+
+
+app.add_middleware(LoginMiddleware)
+
+app.add_middleware(
+    SessionMiddleware,
+    secret_key=os.environ["SESSION_SECRET"],
+    same_site="lax",
+    https_only=False,
+)
+
+@app.get("/login", response_class=HTMLResponse)
+async def login_page(request: Request):
+    if request.session.get("user_id"):
+        return RedirectResponse("/", status_code=303)
+
+    return templates.TemplateResponse(
+        request=request,
+        name="login.html",
+        context={"error": None},
+    )
+
+
+@app.post("/login", response_class=HTMLResponse)
+async def login_submit(request: Request):
+    form = await request.form()
+    username = str(form.get("username", "")).strip()
+    password = str(form.get("password", ""))
+
+    with get_connection() as connection:
+        user = connection.execute(
+            """
+            SELECT id, username, password_hash, role
+            FROM users
+            WHERE username = ? AND is_active = 1
+            """,
+            (username,),
+        ).fetchone()
+
+    if not user or not password_hash.verify(password, user["password_hash"]):
+        return templates.TemplateResponse(
+            request=request,
+            name="login.html",
+            context={"error": "Неверное имя пользователя или пароль."},
+            status_code=401,
+        )
+
+    request.session.clear()
+    request.session["user_id"] = user["id"]
+    request.session["username"] = user["username"]
+    request.session["role"] = user["role"]
+
+    return RedirectResponse("/", status_code=303)
+
+
+@app.post("/logout")
+async def logout(request: Request):
+    request.session.clear()
+    return RedirectResponse("/login", status_code=303)
 
 
 class CustomerCreate(BaseModel):
@@ -754,37 +856,3 @@ def get_analytics_data(start_date: str | None = None, end_date: str | None = Non
 def favicon():
     from fastapi.responses import Response
     return Response(status_code=204)
-
-
-@app.get("/api/products/seed")
-def seed_products_force():
-    products_file = BASE_DIR / "products.json"
-    if not products_file.exists():
-        raise HTTPException(status_code=404, detail="Файл products.json не найден")
-    
-    with open(products_file, "r", encoding="utf-8") as pf:
-        items = json.load(pf)
-        
-    with get_connection() as conn:
-        conn.execute("DELETE FROM products")
-        for item in items:
-            sizes_list = item.get("sizes", [])
-            if isinstance(sizes_list, list):
-                stock_dict = {sz: 5 for sz in sizes_list}
-                sizes_val = json.dumps(stock_dict, ensure_ascii=False)
-            else:
-                sizes_val = str(sizes_list)
-
-            conn.execute("""
-                INSERT INTO products (name, category, price_byn, sizes, in_stock)
-                VALUES (?, ?, ?, ?, ?)
-            """, (
-                item["name"],
-                item.get("category", "Каталог"),
-                item["price_byn"],
-                sizes_val,
-                1 if item.get("in_stock", True) else 0
-            ))
-        conn.commit()
-        
-    return {"status": "success", "count": len(items)}
