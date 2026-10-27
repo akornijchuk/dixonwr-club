@@ -199,6 +199,13 @@ class LoginMiddleware(BaseHTTPMiddleware):
 
 
 app.add_middleware(LoginMiddleware)
+def require_owner(request: Request):
+    if request.session.get("role") != "owner":
+        raise HTTPException(
+            status_code=403,
+            detail="Доступ разрешён только владельцу CRM",
+        )
+    return True
 
 app.add_middleware(
     SessionMiddleware,
